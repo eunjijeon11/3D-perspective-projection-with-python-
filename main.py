@@ -116,11 +116,13 @@ def find_type(molecule):
     
     element = molecule.split(',')
     mtype = "wrong molecule"
-    if len(element) == 2 and element[0] == element[1] and non_genetic_pair[element[0]] != 0:
+    if len(element) == 2 and element[0] == element[1] and (non_genetic_pair[element[0]] != 0 or element[0] == "H"):
         mtype = "2원자분자"
+    elif len(element) == 2:
+        mtype = "직선형"
     elif len(element) == 3:
         if non_genetic_pair[element[0]] == 0:
-            mtype == "직선형"
+            mtype = "직선형"
         elif non_genetic_pair[element[0]] == 2:
             mtype = "굽은형"
     elif len(element) == 4:
@@ -134,10 +136,11 @@ def find_type(molecule):
     sum_elec = valence_emission_electromyography[element[0]]
     for i in range(1,len(element)):
         sum_elec += valence_emission_electromyography[element[i]]-2*non_genetic_pair[element[i]]
-    if sum_elec != 8 and mtype != "2원자분자":
+    if sum_elec != 8 and (element[0] not in ["H", "Li", "Be", "B"]):
         mtype = "wrong molecule"
+        print("triggered")
 
-    print(mtype)
+    print(sum_elec, element[0], mtype)
     return mtype
 
 def connect_point(i, j, k, screen, black=(20,20,20)):
